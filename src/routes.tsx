@@ -70,6 +70,7 @@ import { Experiment, Variant, Default as ExDefault } from "Experiment";
 import { RatingCalculator } from "RatingCalculator";
 import { AccountWarning } from "AccountWarning";
 import { NetworkStatus } from "NetworkStatus";
+import { DetectedCheating } from "DetectedCheating";
 
 import * as docs from "docs";
 
@@ -336,6 +337,7 @@ export const routes = (
                     element={<Navigate to="/tournament-record/45/" replace />}
                 />
                 <Route path="/rating-calculator" element={<RatingCalculator />} />
+                <Route path="/detected-cheating" element={<DetectedCheating />} />
                 <Route path="/" element={<Default />} />
                 <Route path="/*" element={<PageNotFound />} />
             </Routes>
