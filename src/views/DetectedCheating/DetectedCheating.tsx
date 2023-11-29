@@ -78,13 +78,13 @@ export function DetectedCheating(): JSX.Element {
                             <tr key={index}>
                                 <td>{detection.game.id}</td>
                                 <td>{detection.player.id}</td>
-                                <td>{detection.size}</td>
-                                <td>{detection.move_count}</td>
-                                <td>{detection.blur_rate}</td>
-                                <td>{detection.sgf_downloads}</td>
-                                <td>{detection.ailr}</td>
-                                <td>{detection.timing_consistency}</td>
-                                <td>{detection.composite}</td>
+                                <td>{detection.game.size}</td>
+                                <td>{detection.stats.move_count}</td>
+                                <td>{detection.stats.blur_rate}</td>
+                                <td>{detection.stats.has_sgf_downloads}</td>
+                                <td>{detection.stats.AILR}</td>
+                                <td>{detection.stats.timing_consistency}</td>
+                                <td>{detection.stats.composite}</td>
                                 <td>{detection.false_positive}</td>
                             </tr>
                         );
