@@ -29,7 +29,6 @@ export function DetectedCheating(): JSX.Element {
     const [detections, setDetections] = React.useState([]);
 
     React.useEffect(() => {
-        console.log("TEST");
         get("cheat_detection/report")
             .then((res) => {
                 setDetectionData({
@@ -61,7 +60,7 @@ export function DetectedCheating(): JSX.Element {
                 <thead>
                     <tr>
                         <th>Game ID</th>
-                        <th>Suspected Player</th>
+                        <th>Player</th>
                         <th>Size</th>
                         <th>Move Count</th>
                         <th>Blur Rate</th>
@@ -78,14 +77,14 @@ export function DetectedCheating(): JSX.Element {
                             <tr key={index}>
                                 <td>{detection.game.id}</td>
                                 <td>{detection.player.id}</td>
-                                <td>{detection.game.size}</td>
+                                <td>{detection.game.width}</td>
                                 <td>{detection.stats.move_count}</td>
                                 <td>{detection.stats.blur_rate}</td>
-                                <td>{detection.stats.has_sgf_downloads}</td>
+                                <td>{detection.stats.has_sgf_downloads.toString()}</td>
                                 <td>{detection.stats.AILR}</td>
                                 <td>{detection.stats.timing_consistency}</td>
                                 <td>{detection.stats.composite}</td>
-                                <td>{detection.false_positive}</td>
+                                <td>{detection.false_positive.toString()}</td>
                             </tr>
                         );
                     })}
