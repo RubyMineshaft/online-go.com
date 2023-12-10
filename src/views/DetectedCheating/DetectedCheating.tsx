@@ -17,7 +17,10 @@
 
 import * as React from "react";
 import { useUser } from "hooks";
+import { Link } from "react-router-dom";
 import { get } from "requests";
+import { PaginatedTable } from "PaginatedTable";
+import { Player } from "Player";
 
 export function DetectedCheating(): JSX.Element {
     const user = useUser();
@@ -26,7 +29,6 @@ export function DetectedCheating(): JSX.Element {
         fpCount: 0,
         fpRate: 0,
     });
-    const [detections, setDetections] = React.useState([]);
 
     React.useEffect(() => {
         get("cheat_detection/report")
@@ -36,8 +38,6 @@ export function DetectedCheating(): JSX.Element {
                     fpCount: res.false_positives,
                     fpRate: res.false_positive_rate,
                 });
-
-                setDetections(res.detections);
             })
             .catch((err) => {
                 console.error(err);
@@ -56,40 +56,56 @@ export function DetectedCheating(): JSX.Element {
                 <br /> False Positives: {detectionData.fpCount}
                 <br /> False Positive Rate: {detectionData.fpRate}
             </div>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Game ID</th>
-                        <th>Player</th>
-                        <th>Size</th>
-                        <th>Move Count</th>
-                        <th>Blur Rate</th>
-                        <th>SGF Downloads</th>
-                        <th>AILR</th>
-                        <th>Timing Consistency</th>
-                        <th>Composite</th>
-                        <th>False Positive</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {detections.map((detection, index) => {
-                        return (
-                            <tr key={index}>
-                                <td>{detection.game.id}</td>
-                                <td>{detection.player.id}</td>
-                                <td>{detection.game.width}</td>
-                                <td>{detection.stats.move_count}</td>
-                                <td>{detection.stats.blur_rate}</td>
-                                <td>{detection.stats.has_sgf_downloads.toString()}</td>
-                                <td>{detection.stats.AILR}</td>
-                                <td>{detection.stats.timing_consistency}</td>
-                                <td>{detection.stats.composite}</td>
-                                <td>{detection.false_positive.toString()}</td>
-                            </tr>
-                        );
-                    })}
-                </tbody>
-            </table>
+            <PaginatedTable
+                className="detected-cheating-table"
+                source="cheat_detection/list"
+                columns={[
+                    {
+                        header: "Game ID",
+                        render: (X) => (
+                            <Link to={`/game/${X.game.id}`} target="_blank">
+                                {X.game.id}
+                            </Link>
+                        ),
+                    },
+                    {
+                        header: "Player",
+                        render: (X) => <Player user={X.player.id} />,
+                    },
+                    {
+                        header: "Size",
+                        render: (X) => `${X.size}x${X.size}`,
+                    },
+                    {
+                        header: "Move Count",
+                        render: (X) => X.stats.move_count,
+                    },
+                    {
+                        header: "Blur Rate",
+                        render: (X) => Math.round(X.stats.blur_rate),
+                    },
+                    {
+                        header: "SGF Downloads",
+                        render: (X) => X.stats.has_sgf_downloads.toString(),
+                    },
+                    {
+                        header: "AILR",
+                        render: (X) => Math.round(X.stats.AILR),
+                    },
+                    {
+                        header: "Timing Consistency",
+                        render: (X) => X.stats.timing_consistency,
+                    },
+                    {
+                        header: "Composite",
+                        render: (X) => X.stats.composite?.toFixed(3),
+                    },
+                    {
+                        header: "False Positive",
+                        render: (X) => X.false_positive?.toString(),
+                    },
+                ]}
+            />
         </div>
     );
 }
