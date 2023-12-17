@@ -29,8 +29,9 @@ export function DetectedCheating(): JSX.Element {
         fpCount: 0,
         fpRate: 0,
     });
+    const [fpOnly, setFpOnly] = React.useState(false);
 
-    React.useEffect(() => {
+    function load_detections() {
         get("cheat_detection/report")
             .then((res) => {
                 setDetectionData({
@@ -42,6 +43,10 @@ export function DetectedCheating(): JSX.Element {
             .catch((err) => {
                 console.error(err);
             });
+    }
+
+    React.useEffect(() => {
+        load_detections();
     }, []);
 
     if (!user.is_moderator && !user.moderator_powers) {
@@ -56,9 +61,12 @@ export function DetectedCheating(): JSX.Element {
                 <br /> False Positives: {detectionData.fpCount}
                 <br /> False Positive Rate: {detectionData.fpRate}
             </div>
+            False Positives Only{" "}
+            <input type="checkbox" checked={fpOnly} onChange={() => setFpOnly(!fpOnly)} />
             <PaginatedTable
                 className="detected-cheating-table"
                 source="cheat_detection/list"
+                filter={fpOnly ? { false_positive: true } : {}}
                 columns={[
                     {
                         header: "Game ID",
