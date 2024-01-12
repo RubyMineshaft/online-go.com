@@ -50,7 +50,7 @@ export function DetectedCheating(): JSX.Element {
     }, []);
 
     if (!user.is_moderator && !user.moderator_powers) {
-        return null;
+        return <></>;
     }
 
     return (
